@@ -1,0 +1,19 @@
+FROM node:20.11.1 AS build
+
+WORKDIR /app
+
+
+COPY . /app/
+
+
+RUN npm install 
+RUN npm run build 
+
+
+FROM nginx:1.23.3 AS nginx
+
+EXPOSE 80
+
+COPY --from=build /app/dist/hola_mundo/browser /usr/share/nginx/html
+    
+CMD ["nginx", "-g", "daemon off;"]
